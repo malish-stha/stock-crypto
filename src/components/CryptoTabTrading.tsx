@@ -9,6 +9,7 @@ import {
 import StockCard from "./Cryptocard";
 import CryptoTable from "./TableData";
 import TradingView from "./TradingView";
+import forecastImage from "../assets/forecast.png";
 
 const CryptoTabs: React.FC = () => {
   const { coinId } = useParams();
@@ -68,8 +69,13 @@ const CryptoTabs: React.FC = () => {
           cryptoList={cryptoList?.data?.coins || []}
         />
       </div>
-      <div>
-        <TradingView symbol={tradingViewSymbol} />
+      <div className="flex flex-col md:flex-row space-x-8 py-4">
+        <div className="flex-1">
+          <TradingView symbol={tradingViewSymbol} />
+        </div>
+        <div className="flex-1">
+          <img src={forecastImage} alt="Forecast" className="w-full h-auto" />
+        </div>
       </div>
       <div>
         <CryptoTable selectedCrypto={selectedCrypto} timePeriod={timePeriod} />

@@ -18,7 +18,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({ symbol }) => {
       script.async = true;
       script.innerHTML = `
         {
-          "width": "900",
+          "width": "800",
           "height": "600",
           "symbol": "${symbol}",
           "interval": "D",
