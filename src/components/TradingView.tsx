@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, memo } from "react";
 
-// Type for the ref to make TypeScript aware of its type
-const TradingViewWidget: React.FC = () => {
-  // Ref to the container div
+type TradingViewWidgetProps = {
+  symbol: string;
+};
+
+const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({ symbol }) => {
   const container = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (container.current) {
-      // Clear the previous content of the container to avoid multiple charts
       container.current.innerHTML = "";
 
       const script = document.createElement("script");
@@ -17,9 +18,9 @@ const TradingViewWidget: React.FC = () => {
       script.async = true;
       script.innerHTML = `
         {
-          "width": "1000",
-          "height": "500",
-          "symbol": "BITSTAMP:BTCUSD",
+          "width": "900",
+          "height": "600",
+          "symbol": "${symbol}",
           "interval": "D",
           "timezone": "Etc/UTC",
           "theme": "light",
@@ -34,17 +35,15 @@ const TradingViewWidget: React.FC = () => {
           "support_host": "https://www.tradingview.com"
         }`;
 
-      // Append the script to the container
       container.current.appendChild(script);
     }
 
-    // Cleanup function to remove the script when the component unmounts
     return () => {
       if (container.current) {
-        container.current.innerHTML = ""; // This clears the widget when unmounted
+        container.current.innerHTML = "";
       }
     };
-  }, []); // The empty dependency array ensures this effect runs only once
+  }, [symbol]);
 
   return (
     <div className="tradingview-widget-container" ref={container}>

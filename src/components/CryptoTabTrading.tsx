@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import StockCard from "./Cryptocard";
-import {
-  useGetCryptosQuery,
-  useGetCryptoHistoryQuery,
-  useGetCryptoDetailsQuery,
-} from "../services/cryptoApi";
 import { CircularProgress } from "@mui/material";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import {
+  useGetCryptoDetailsQuery,
+  useGetCryptoHistoryQuery,
+  useGetCryptosQuery,
+} from "../services/cryptoApi";
+import StockCard from "./Cryptocard";
 import CryptoTable from "./TableData";
 import TradingView from "./TradingView";
 
@@ -14,7 +14,16 @@ const CryptoTabs: React.FC = () => {
   const { coinId } = useParams();
   const [timePeriod, setTimePeriod] = useState("7d");
   const { data: cryptoList, isFetching, error } = useGetCryptosQuery({});
-  const [selectedCrypto, setSelectedCrypto] = useState<string>(coinId || "");
+  const [selectedCrypto, setSelectedCrypto] = useState<string>(
+    coinId || "Qwsogvtv82FCd"
+  ); // Default to Bitcoin (BTC)
+
+  // Effect to update `selectedCrypto` if `coinId` changes
+  useEffect(() => {
+    if (coinId) {
+      setSelectedCrypto(coinId);
+    }
+  }, [coinId]);
 
   const { data: coinHistory } = useGetCryptoHistoryQuery({
     coinId: selectedCrypto,
@@ -30,42 +39,19 @@ const CryptoTabs: React.FC = () => {
     setSelectedCrypto(cryptoUuid);
   };
 
-  const handleTimePeriodChange = (period: string) => {
-    setTimePeriod(period);
-  };
-
   if (isFetching || isFetchingCryptoData) return <CircularProgress />;
   if (error) {
     console.error("Error fetching data:", error);
-    return <div>Error: </div>;
+    return <div>Error: Unable to fetch data</div>;
   }
 
-  // Prepare data for the line chart
-  const chartData = coinHistory?.data
-    ? {
-        labels: coinHistory.data.history
-          .map((entry: any) =>
-            new Date(entry.timestamp * 1000).toLocaleDateString()
-          )
-          .reverse(), // Reverse the dates
-        datasets: [
-          {
-            label: "Price",
-            data: coinHistory.data.history
-              .map((entry: any) => entry.price)
-              .reverse(), // Reverse the data values to match the reversed dates
-            borderColor: "rgba(75, 192, 192, 1)",
-            backgroundColor: "rgba(75, 192, 192, 0.2)",
-            fill: true,
-            tension: 0.4,
-          },
-        ],
-      }
-    : null;
+  const tradingViewSymbol = `${
+    selectedCryptoData?.data?.coin?.exchange || "BITSTAMP"
+  }:${selectedCryptoData?.data?.coin?.symbol || "BTC"}USD`;
 
   return (
     <>
-      <div className="overflow-hidden">
+      <div className="py-4">
         <StockCard
           symbol={selectedCryptoData?.data?.coin?.symbol || "BTC"}
           name={selectedCryptoData?.data?.coin?.name || "Bitcoin"}
@@ -81,20 +67,9 @@ const CryptoTabs: React.FC = () => {
           onCryptoChange={handleCryptoChange}
           cryptoList={cryptoList?.data?.coins || []}
         />
-        {/* <div className="mt-6 flex items-center px-14 overflow-hidden">
-          <select
-            onChange={(e) => handleTimePeriodChange(e.target.value)}
-            value={timePeriod}
-          >
-            <option value="7d">7 Days</option>
-            <option value="30d">30 Days</option>
-            <option value="1y">1 Year</option>
-          </select>
-        </div>
-        {chartData && <ChartComponent chartData={chartData} />} */}
       </div>
       <div>
-        <TradingView />
+        <TradingView symbol={tradingViewSymbol} />
       </div>
       <div>
         <CryptoTable selectedCrypto={selectedCrypto} timePeriod={timePeriod} />
