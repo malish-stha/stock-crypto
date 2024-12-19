@@ -16,25 +16,25 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({ symbol }) => {
         "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
       script.type = "text/javascript";
       script.async = true;
-      script.innerHTML = `
-        {
-          "width": "800",
-          "height": "600",
-          "symbol": "${symbol}",
-          "interval": "D",
-          "timezone": "Etc/UTC",
-          "theme": "light",
-          "style": "1",
-          "locale": "en",
-          "gridColor": "rgba(0, 0, 0, 0.06)",
-          "withdateranges": true,
-          "hide_side_toolbar": false,
-          "allow_symbol_change": false,
-          "save_image": false,
-          "calendar": false,
-          "support_host": "https://www.tradingview.com"
-        }`;
 
+      script.innerHTML = `
+      {
+        "autosize": true,
+       "symbol": "${symbol}",
+        "interval": "D",
+        "timezone": "Etc/UTC",
+        "theme": "dark",
+        "style": "1",
+        "locale": "en",
+        "withdateranges": true,
+        "hide_side_toolbar": false,
+        "allow_symbol_change": true,
+        "calendar": false,
+        "show_popup_button": true,
+        "popup_width": "1000",
+        "popup_height": "800",
+        "support_host": "https://www.tradingview.com"
+      }`;
       container.current.appendChild(script);
     }
 
