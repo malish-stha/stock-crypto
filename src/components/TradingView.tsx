@@ -23,7 +23,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({ symbol }) => {
        "symbol": "${symbol}",
         "interval": "D",
         "timezone": "Etc/UTC",
-        "theme": "dark",
+        "theme": "light",
         "style": "1",
         "locale": "en",
         "withdateranges": true,

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import StockTab from "./StockTab";
+
 import CryptoTabs from "./CryptoTabTrading";
+import StockTab from "./StockTab";
 
 type Props = {};
 
@@ -8,7 +9,7 @@ const Tabs = (props: Props) => {
   const [activeTab, setActiveTab] = useState("stock");
 
   return (
-    <div className="w-full h-screen px-6">
+    <div className="w-full h-screen p-6">
       {/* Tabs Navigation */}
       <div className="flex items-center space-x-4 border-b border-gray-200 px-4">
         <button

@@ -1,22 +1,46 @@
 import { UserRound } from "lucide-react";
-import Button from "@mui/material/Button";
+import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+import { useState } from "react";
+import SignInDialog from "./SignIn";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <nav>
-      <div className="container mx-auto py-4 flex items-center justify-end">
+    <AppBar
+      position="static"
+      sx={{
+        backgroundColor: "rgba(255, 255, 255, 0.2)",
+        backdropFilter: "blur(10px)",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        color: "#000",
+      }}
+    >
+      <Toolbar>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          StockCrypto
+        </Typography>
         <Button
           variant="contained"
-          className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 hover:bg-blue-600"
+          startIcon={<UserRound />}
+          onClick={handleClickOpen}
           sx={{ borderRadius: "10px" }}
         >
-          <UserRound />
           Sign in
         </Button>
-      </div>
-    </nav>
+        <SignInDialog open={open} onClose={handleClose} />
+      </Toolbar>
+    </AppBar>
   );
 };
 
